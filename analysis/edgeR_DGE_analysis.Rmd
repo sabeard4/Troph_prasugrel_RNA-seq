@@ -1,0 +1,392 @@
+---
+title: "Primary trophoblast differential expression analysis with prasugrel treatment"
+author: "Sally Beard"
+date: "2022-09-26"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+The sequencing data used in the following analysis was generated at Victorian Clinical Genetics Services (VCGS) from RNA isolated from  primary trophoblasts isolated from n=7 placentas, cultured with prasugrel and vehicle for 24 hours. TruSeq stranded mRNA library prep and sequencing on the NovaSeq 6000 platform were performed to produce 150 bp paired end reads. Fastq files were aligned against the human genome GRCh38 using `hisat2`, then files were sorted with `SAMtools`, before reads aligning to exons were counted using `htseq` with default parameters.
+
+```{r}
+#import required libraries
+library(limma)
+library(Glimma)
+library(edgeR)
+library(tidyverse)
+library(EDASeq)
+library(RColorBrewer)
+library(tableone)
+library(knitr)
+library(kableExtra)
+library(Homo.sapiens)
+library(patchwork)
+library(NMF)
+library(here)
+library(ggrepel)
+library(GOplot)
+```
+
+## Data import
+
+Set up `DGElist` object for downstream analysis and add sample-specific information.
+
+```{r}
+#list count files from working directory
+files = list.files("/Users/beards/rnaseq_notebook_template-master/counts", pattern = "[counts]$")
+
+#edgeR has a function readDGE for combining separate count files into one matrix of counts in one step
+counts <- readDGE(files, path = "/Users/beards/rnaseq_notebook_template-master/counts", columns = c(1,3), header = FALSE)
+
+#remove meta tags as library size includes counts from the meta tags
+MetaTags <- grep("^__", rownames(counts))
+counts <- counts[-MetaTags, ]
+
+#update library size to reflect mapped reads
+counts$samples$lib.size <- colSums(counts$counts)
+
+#obtain sample names from file names
+sample <- strsplit2(files, "\\.")[,1]
+counts$samples$sample <- as.factor(sample)
+samplenames <- counts$samples$sample
+
+#Add sample-level information related to experimental design (and possible confounding factors) to the count matrix
+group <- as.factor(c("Pras_0", "Pras_100", "Pras_0", "Pras_100", "Pras_0", "Pras_100", "Pras_0", "Pras_100", "Pras_0", "Pras_100", "Pras_0", "Pras_100", "Pras_0", "Pras_100"))
+counts$samples$group <- group
+run <- as.factor(c("1", "1", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"))
+counts$samples$run <- run
+placenta <- as.factor(c("1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7"))
+counts$samples$placenta <- placenta
+sex <- as.factor(c("f", "f", "m", "m", "f", "f", "f", "f", "f", "f", "m", "m", "m", "m"))
+counts$samples$sex <- sex
+
+#import information for each gene
+geneid <- rownames(counts)
+genes <- select(Homo.sapiens, keys=geneid, columns=c("SYMBOL", "TXCHROM", "ENTREZID"), 
+                keytype="ENSEMBL")
+genes <- genes[!duplicated(genes$ENSEMBL),]
+counts$genes <- genes
+
+#remove genes without ENTREZ IDs
+keep <- !is.na(counts$genes$ENTREZID) & !is.null(counts$genes$ENTREZID)
+counts <- counts[keep, ]
+
+#generate library statistics
+cpm <- cpm(counts)
+lcpm <- cpm(counts, log=TRUE)
+L <- mean(counts$samples$lib.size) * 1e-6
+M <- median(counts$samples$lib.size) * 1e-6
+```
+
+## Quality control
+
+Genes with no or low counts are unlikely to be biologically important, they provide little evidence for differential expression, and interfere with statistical approximations, so they were filtered out before performing the analysis. Genes with low or no counts (counts per million reads that corresponded to less than ~10 reads in any 7 samples (smallest group size)) were filtered out of the analysis, based on the recommendations in the edgeR documentation.
+
+```{r}
+#filter out genes with low expression
+keep.exprs <- filterByExpr(counts, group=counts$samples$group)
+counts_filtered <- counts[keep.exprs,, keep.lib.sizes=FALSE]
+```
+
+Plotting the distribution of log-CPM values (below) showed that before filtering (A) many genes in each sample had low or no expression, with negative log-CPM values. These genes were removed from the analysis after filtering (B).
+
+```{r denisty-plot}
+#make density plots for counts before and after filtering out genes with low expression
+par(mfrow = c(1,1))
+lcpmz <- lcpm
+lcpm.cutoff <- log2(10/M + 2/L)
+nsamples <- ncol(counts)
+col <- scales::hue_pal()(nsamples)
+plot(density(lcpm[,1]), col=col[1], lwd=2, ylim=c(0,0.3), las=2, main="", xlab="")
+  title(main="A. Raw data", xlab="Log-cpm")
+abline(v=lcpm.cutoff, lty=3)
+for (i in 2:nsamples){
+  den <- density(lcpm[,i])
+  lines(den$x, den$y, col=col[i], lwd=2)
+}
+lcpm2 <- cpm(counts_filtered, log=TRUE)
+plot(density(lcpm2[,1]), col=col[1], lwd=2, ylim=c(0,0.3), las=2, main="", xlab="")
+title(main="B. Filtered data", xlab="Log-cpm")
+abline(v=lcpm.cutoff, lty=3)
+for (i in 2:nsamples){
+  den <- density(lcpm2[,i])
+  lines(den$x, den$y, col=col[i], lwd=2)
+}
+```
+
+TMM normalisation was applied to account for any highly expressed genes monopolising the sequencing and to account for the underlying differences in the distributions of expressed transcripts between samples.
+
+```{r}
+#apply TMM normalisation
+counts <- calcNormFactors(counts_filtered, method = "TMM")
+```
+
+Effective library sizes varied from around 35 million reads to more than 60 million reads, with the median just under 48 million reads (A). The range and distribution of expression values look fairly uniform between samples, and TMM normalisation further improves this.
+
+```{r expression-plot}
+dat <- data.frame(lib = counts$samples$lib.size,
+                  status = counts$samples$group,
+                  sample = colnames(counts))
+p1 <- ggplot(dat, aes(x = sample, y = lib, fill = status)) +
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "Sample", y = "Library size",
+       fill = "Prasugrel treatment", title = "A. Library size after filtering") +
+  geom_hline(yintercept = median(dat$lib), linetype = "dashed") +
+  scale_x_discrete(limits = dat$sample)
+
+dat <- reshape2::melt(cpm(counts, normalized.lib.sizes = FALSE, log = TRUE),
+                      value.name = "cpm")
+dat$status <- rep(counts$samples$group, each = nrow(counts))
+colnames(dat)[2] <- "sample"
+p2 <- ggplot(dat, aes(x = sample, y = cpm, fill = status)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.75) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)) +
+  labs(x = "Sample", y = "Log-CPM",
+       fill = "Prasugrel treatment", title = "B. Expression values after filtering") +
+  geom_hline(yintercept = median(dat$lib), linetype = "dashed")
+
+dat <- reshape2::melt(cpm(counts, normalized.lib.sizes = TRUE, log = TRUE),
+                      value.name = "cpm")
+
+dat$status <- rep(counts$samples$group, each = nrow(counts))
+colnames(dat)[2] <- "sample"
+p3 <- ggplot(dat, aes(x = sample, y = cpm, fill = status)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.75) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)) +
+  labs(x = "Sample", y = "Log-CPM",
+       fill = "Prasugrel treatment", title = "C. Expression values after normalisation") +
+  geom_hline(yintercept = median(dat$lib), linetype = "dashed")
+
+p1 / (p2 + p3) + plot_layout(guides = "collect")
+```
+
+Multi-dimensional scaling (MDS) plots show the largest sources of variation in the data. They are a good way of identifying structure in the data and exploring relationships between samples. The following plots examine the first four principle components coloured for known features of the data including prasugrel treatment, fetal sex, sequencing run, and placenta of origin. The samples do not cluster by prasugrel treatment, but within each pair of vehicle or prasugrel treated samples, the same shift in the first dimension is seen.
+
+```{r mds-plot}
+dims <- list(c(1,2), c(1,3), c(2,3), c(3,4))
+vars <- c("group", "sex", "run", "placenta")
+patches <- vector("list", length(vars))
+
+for(i in 1:length(vars)){
+  p <- vector("list", length(dims))
+  
+  for(j in 1:length(dims)){
+    mds <- plotMDS(cpm(counts, log = TRUE), top = 1000, gene.selection="common", 
+                   plot = FALSE, dim.plot = dims[[j]])
+    dat <- tibble::tibble(x = mds$x, y = mds$y,
+                          sample = samplenames,
+                          variable = pull(counts$samples, vars[i]))
+    
+    p[[j]] <- ggplot(dat, aes(x = x, y = y, colour = variable)) +
+      geom_text(aes(label = sample), size = 2.5) +
+      labs(x = glue::glue("Principal component {dims[[j]][1]}"), 
+           y = glue::glue("Principal component {dims[[j]][2]}"),
+           colour = vars[i])
+  }
+  
+  patches[[i]] <- wrap_elements(wrap_plots(p, ncol = 2, guides = "collect") +
+    plot_annotation(title = glue::glue("Coloured by: {vars[i]}")) &
+    theme(legend.position = "bottom"))
+  
+}
+
+patches
+```
+
+## Differential expression analysis
+
+The prasugrel treated trophoblast samples were compared to those without prasugrel (vehicle) treatment, adjusting for placenta of origin (additive model). Negative binomial dispersion was estimated for the dataset, and differential expression was tested using the quasi-likelihood F-test.  A summary of the number of differentially expressed genes (table 1) and their details (table 2) are shown below.
+
+```{r edgeR-output}
+group <- as.factor(counts$samples$group)
+placenta <- as.factor(counts$samples$placenta)
+
+#set up design matrix to test hypertension status
+design1 <- model.matrix(~placenta + group)
+colnames(design1) <- gsub("group", "", colnames(design1))
+rownames(design1) <- samplenames
+
+#estimate dispersion
+counts <- estimateDisp(counts, design1, robust=TRUE)
+
+plotBCV(counts, cex.lab = 1.5)
+
+
+fit <- glmQLFit(counts, design1)
+qlf <- glmQLFTest(fit)
+
+plotQLDisp(fit, cex.lab = 1.5)
+
+kable_styling(kable(summary(decideTests(qlf)), caption="Table 1: Number of differentially expressed genes"))
+
+top_tags <- data.frame(topTags(qlf, n=30, sort.by = "P"))
+kable_styling(kable(top_tags[,c(3,5,6,9)], caption="Table 2: Top 30 DE genes in prasugrel treated trophoblasts compared to vehicle treated"))
+```
+
+Since so many DE genes were identified, a logFC cut-off was applied using the `treat` method (McCarthy and Smyth 2009), which can be used to calculate p-values from empirical Bayes moderated t-statistics with a minimum log-FC requirement. The cutoff was set to 1. A summary of the number of differentially expressed genes (table 3) and their details (table 4) are shown below.
+
+```{r}
+tr <- glmTreat(fit, lfc=1)
+kable_styling(kable(summary(decideTests(tr)), caption="Table 3: Number of differentially expressed genes from treat method"))
+
+top_treat <- data.frame(topTags(tr, n=25, sort.by = "P"))
+write.csv(top_treat, "./docs/DGE_lists/edgeR_treat.csv")
+kable_styling(kable(top_treat[,c(3,5,6,9)], caption="Table 4: DE genes in prasugrel treated trophoblasts compared to vehicle treated with treat method"))
+```
+
+The heatmap below shows that samples cluster within their treatment groups and up and down-regulated genes cluster separately.
+
+```{r heatmap}
+logCPM <- cpm(counts, prior.count=2, log=TRUE)
+rownames(logCPM) <- counts$genes$SYMBOL
+colnames(logCPM) <- paste(counts$samples$group)
+o <- order(tr$table$PValue)
+logCPM <- logCPM[o[1:51],]
+logCPM <- t(scale(t(logCPM)))
+library(gplots)
+col.pan <- colorpanel(100, "blue", "white", "red")
+heatmap.2(logCPM, col=col.pan, Rowv=TRUE, scale="none", trace="none", dendrogram="both", cexRow=0.7, cexCol=1, density.info="none")
+```
+
+The volcano plot below shows the statistical significance versus the logFC of genes in the differential expression analysis. Genes with FDR < 0.05 are coloured in red.
+
+```{r volcano-plot}
+data.frame(topTags(tr, n=Inf)) %>% mutate(sig = ifelse(FDR <= 0.05, "<= 0.05", "> 0.05")) -> dat
+
+ggplot(dat, aes(x = logFC, y = -log10(PValue), color = sig)) +
+  geom_point(alpha = 0.75) +
+  ggrepel::geom_text_repel(data = subset(dat, FDR < 0.05), 
+            aes(x = logFC, y = -log10(PValue), 
+                label = SYMBOL), 
+            size = 2, colour = "black", max.overlaps = 15) +
+  labs(x = expression(~log[2]~"(Fold Change)"), 
+       y = expression(~-log[10]~"(P-value)"),
+       colour = "FDR") +
+  scale_colour_brewer(palette = "Set1")
+```
+
+The following plots show the counts (per million) of the top 12 differentially expressed genes identified as being altered in trophoblast cells with prasugrel treatment. Grey lines connecting the samples isolated from the same placenta (matched treatment (Pras_100) and vehicle (Pras_0)) show that although between placentas there is variability in the expression level of these genes, in all cases these genes responded in the same way to prasugrel treatment in cells isolated from each of the seven placentas.
+
+```{r gene-expression}
+dat <- reshape2::melt(cpm(counts, log = TRUE),
+                      value.name = "cpm")
+dat$group <- rep(counts$samples$group, each = nrow(counts))
+dat$gene <- rep(counts$genes$SYMBOL, ncol(counts))
+top <- data.frame(top_treat)
+
+p <- vector("list", 12)
+
+for(i in 1:length(p)){
+  p[[i]] <- ggplot(data = subset(dat, dat$gene == top$SYMBOL[i]), 
+       aes(x = group, y = cpm, colour = group)) +
+  geom_point(aes(color = group)) +
+  geom_line(aes(group = placenta),color="grey") +
+  stat_summary(fun = "mean", geom = "crossbar") +
+  labs(x = "Treatment", y = "log2 CPM", colour = "Treatment") +
+  ggtitle(top$SYMBOL[i]) +
+  theme(plot.title = element_text(size = 8),
+        plot.subtitle = element_text(size = 7),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 7))
+}
+
+wrap_plots(p, guides = "collect", ncol = 4) & 
+  theme(legend.position = "bottom")
+```
+
+## Gene set enrichment analysis
+
+Testing for enrichment of Gene Ontology (GO) categories among statistically significant differentially expressed genes (with larger logFC) using `goana`.
+
+```{r}
+go <- goana(top$ENTREZID[top$FDR < 0.05], universe = counts$genes$entrezid)
+goana_treat <- topGO(go, number = Inf) %>%
+  mutate(FDR = p.adjust(P.DE)) %>%
+  dplyr::filter(FDR < 0.05)
+write.csv(goana_treat, "./docs/goana_output/goana_treat.csv", row.names = TRUE)
+kable_styling(knitr::kable(goana_treat, format.args = list(scientific = -1), digits = 50))
+```
+
+All five categories involve viral response or interferon signalling, and are highly likely to be overlapping GO categories, so while this is informative, it only provides one lead.
+
+When testing for enrichment of GO categories among all statistically significant genes (regardless of logFC), many more categories were identified (below), but they are not very specific.
+
+```{r}
+top <- data.frame(topTags(qlf, n=Inf, sort.by = "P"))
+go_all <- goana(top$ENTREZID[top$FDR < 0.05], universe = counts$genes$entrezid)
+goana_all <- topGO(go_all, number =Inf) %>%
+  mutate(FDR = p.adjust(P.DE)) %>%
+  dplyr::filter(FDR < 0.05)
+write.csv(goana_all, "./docs/goana_output/goana_all.csv", row.names = TRUE)
+kable_styling(kable(goana_all[1:30,], format.args = list(scientific = -1), digits = 50))
+```
+
+The `camera` function performs a competitive test to find if genes in a given set are highly ranked in terms of differential expression compared to genes that are not in that set. In the output below we tested gene sets from the Molecular Signatures Database ([MSigDB](https://www.gsea-msigdb.org/gsea/msigdb/index.jsp_)).
+
+MSigDB genesets from version 7.1 in R format were downloaded [here](https://bioinf.wehi.edu.au/MSigDB/v7.1/) for this analysis. We looked at GO gene sets, Hallmark gene sets and curated gene sets.
+
+The GO gene sets consist of genes annotated by the same GO terms.
+
+```{r}
+GO <- readRDS("./data/MSigDB/Hs.c5.all.v7.1.entrez.rds", refhook = NULL)
+idx <- ids2indices(GO, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_GO <- camera(counts,idx,design1)
+write.csv(cam_GO[cam_GO$FDR < 0.05,], "./docs/camera_output/GO.csv", row.names = TRUE)
+kable_styling(kable(cam_GO[cam_GO$FDR < 0.05,][1:30,], format.args = list(scientific = -1), digits = 50))
+```
+
+The Hallmark gene sets are coherently expressed signatures derived by aggregating many MSigDB gene sets to represent well-defined biological states or processes.
+
+```{r}
+hallmark <- readRDS("./data/MSigDB/Hs.h.all.v7.1.entrez.rds", refhook = NULL)
+idx <- ids2indices(hallmark, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_h <- camera(counts,idx,design1)
+write.csv(cam_h[cam_h$FDR < 0.05,], "./docs/camera_output/hallmark.csv", row.names = TRUE)
+kable_styling(kable(cam_h[cam_h$FDR < 0.05,], format.args = list(scientific = -1), digits = 50))
+```
+
+The barcode plots below show the enrichment of genes among the up and down regulated genes in the top four hallmark gene sets identified by the camera analysis. The black bars represent the logFC of each of the genes, with down regulated genes at the left and up regulated genes at the right of each plot. The enrichment worm at the top of the plot shows the relative enrichment of the genes in each part of the plot.
+
+```{r hallmark_barcode}
+par(mfrow=c(2,2))
+sapply(1:4, function(i){
+  barcodeplot(qlf$table$logFC, index=idx[[rownames(cam_h)[i]]], 
+              main = rownames(cam_h)[i], cex.main = 0.75)
+})
+```
+
+The curated gene sets are compiled from online pathway databases, publications in PubMed, and knowledge of domain experts. 
+
+```{r}
+c2 <- readRDS("./data/MSigDB/Hs.c2.all.v7.1.entrez.rds", refhook = NULL)
+idx <- ids2indices(c2, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_c2 <- camera(counts,idx,design1)
+write.csv(cam_c2[cam_c2$FDR < 0.05,], "./docs/camera_output/c2.csv", row.names = TRUE)
+kable_styling(kable(cam_c2[cam_c2$FDR < 0.05,][1:30,], format.args = list(scientific = -1), digits = 50))
+```
+
+The top gene set identified was [SINGH_NFE2L2_TARGETS](https://www.gsea-msigdb.org/gsea/msigdb/cards/SINGH_NFE2L2_TARGETS), which consists of genes down-regulated in lung cancer cell lines when NRF2 is knocked down by RNAi. This results correlates with previous experimental evidence generated in our lab that suggests prasugrel up-regulates NRF2 response genes. Many of the down-regulated gene sets in this list consist of interferon response genes, which correlates with the GO results and Hallmark genes sets identified above. The barcode plots below show the top 4 genesets.
+
+```{r c2_barcode}
+par(mfrow=c(2,2))
+sapply(1:4, function(i){
+  barcodeplot(qlf$table$logFC, index=idx[[rownames(cam_c2)[i]]], 
+              main = rownames(cam_c2)[i], cex.main = 0.75)
+})
+```
+
+## Summary
+
+While there was some variability between trophoblast cells isolated from different placentas, within each trophoblast isolation, the transcriptome of the cells responded similarly to prasugrel. We identified 2698 down-regulated and 2317 upregulated genes with FDR < 0.05. When a logFC cutoff was applied, we identified 9 down-regulated and 16 up-regulated genes with prasugrel treatment, which represented genes that are most likely to be biologically meaningful. The significant genes were enriched for GO terms associated with interferon signalling. Gene set testing supported these results, as well as well as identified gene sets that implicate prasugrel in NRF2-regulated pathways.
+
+```{r}
+sessionInfo()
+```
+
