@@ -1,7 +1,7 @@
-name: "Troph_prasugrel_RNA-seq"
+name: Troph_prasugrel_RNA-seq
 output_dir: ../docs
 navbar:
-  title: "Troph_prasugrel_RNA-seq"
+  title: Troph_prasugrel_RNA-seq
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/sabeard4/Troph_prasugrel_RNA-seq
 output:
   workflowr::wflow_html:
     toc: yes
