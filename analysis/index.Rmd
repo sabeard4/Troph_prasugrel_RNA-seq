@@ -8,4 +8,16 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+## Transcriptomic analysis of RNA from primary trophoblasts treated with prasugrel *in vitro*
+
+This site contains the analysis of RNA-seq data generated from primary cytotrophoblast cells isolated from seven term placentas and cultured *in vitro* for 24 hours in the presence of 100uM prasugrel and vehicle control. Gene expression differences in the prasugrel treated cells compared to control were identified using `edgeR`. Gene set enrichment and gene set testing were used to explore the findings.
+
+### Mapping based DGE analysis
+ * Read mapping, counting and quality control
+    * [MultiQC Report](multiqc_report.html): Mapping and quality statistics
+
+### edgeR
+* DGE analysis
+  * [DGE results](edgeR_DGE_analysis.html): Exploratory data analysis and DGE analysis          comparing preterm samples between cases and controls using [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html)
+
+    
