@@ -1,0 +1,4418 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Sally Beard" />
+
+<meta name="date" content="2022-09-26" />
+
+<title>Primary trophoblast differential expression analysis with prasugrel treatment</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Troph_prasugrel_RNA-seq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Primary trophoblast differential expression analysis with prasugrel treatment</h1>
+<h4 class="author">Sally Beard</h4>
+<h4 class="date">2022-09-26</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-09-28
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Troph_prasugrel_RNA-seq/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220920code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220920)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220920code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220920)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong920ff00"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 920ff00 </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong920ff00" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 920ff00. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/Limma_DGE_analysis.Rmd
+    Untracked:  data/MSigDB/
+    Untracked:  output/hallmark.csv
+
+Unstaged changes:
+    Modified:   README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/edgeR_DGE_analysis.Rmd</code>) and HTML (<code>docs/edgeR_DGE_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+920ff00
+</td>
+<td>
+Sally Beard
+</td>
+<td>
+2022-09-28
+</td>
+<td>
+Publish the analysis script
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The sequencing data used in the following analysis was generated at Victorian Clinical Genetics Services (VCGS) from RNA isolated from primary trophoblasts isolated from n=7 placentas, cultured with prasugrel and vehicle for 24 hours. TruSeq stranded mRNA library prep and sequencing on the NovaSeq 6000 platform were performed to produce 150 bp paired end reads. Fastq files were aligned against the human genome GRCh38 using <code>hisat2</code>, then files were sorted with <code>SAMtools</code>, before reads aligning to exons were counted using <code>htseq</code> with default parameters.</p>
+<pre class="r"><code>#import required libraries
+library(limma)
+library(Glimma)
+library(edgeR)
+library(tidyverse)
+library(EDASeq)
+library(RColorBrewer)
+library(tableone)
+library(knitr)
+library(kableExtra)
+library(Homo.sapiens)
+library(patchwork)
+library(NMF)
+library(here)
+library(ggrepel)
+library(GOplot)</code></pre>
+<div id="data-import" class="section level2">
+<h2>Data import</h2>
+<p>Set up <code>DGElist</code> object for downstream analysis and add sample-specific information.</p>
+<pre class="r"><code>#list count files from working directory
+files = list.files(&quot;/Users/beards/rnaseq_notebook_template-master/counts&quot;, pattern = &quot;[counts]$&quot;)
+
+#edgeR has a function readDGE for combining separate count files into one matrix of counts in one step
+counts &lt;- readDGE(files, path = &quot;/Users/beards/rnaseq_notebook_template-master/counts&quot;, columns = c(1,3), header = FALSE)
+
+#remove meta tags as library size includes counts from the meta tags
+MetaTags &lt;- grep(&quot;^__&quot;, rownames(counts))
+counts &lt;- counts[-MetaTags, ]
+
+#update library size to reflect mapped reads
+counts$samples$lib.size &lt;- colSums(counts$counts)
+
+#obtain sample names from file names
+sample &lt;- strsplit2(files, &quot;\\.&quot;)[,1]
+counts$samples$sample &lt;- as.factor(sample)
+samplenames &lt;- counts$samples$sample
+
+#Add sample-level information related to experimental design (and possible confounding factors) to the count matrix
+group &lt;- as.factor(c(&quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;, &quot;Pras_0&quot;, &quot;Pras_100&quot;))
+counts$samples$group &lt;- group
+run &lt;- as.factor(c(&quot;1&quot;, &quot;1&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;))
+counts$samples$run &lt;- run
+placenta &lt;- as.factor(c(&quot;1&quot;, &quot;1&quot;, &quot;2&quot;, &quot;2&quot;, &quot;3&quot;, &quot;3&quot;, &quot;4&quot;, &quot;4&quot;, &quot;5&quot;, &quot;5&quot;, &quot;6&quot;, &quot;6&quot;, &quot;7&quot;, &quot;7&quot;))
+counts$samples$placenta &lt;- placenta
+sex &lt;- as.factor(c(&quot;f&quot;, &quot;f&quot;, &quot;m&quot;, &quot;m&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;m&quot;, &quot;m&quot;, &quot;m&quot;, &quot;m&quot;))
+counts$samples$sex &lt;- sex
+
+#import information for each gene
+geneid &lt;- rownames(counts)
+genes &lt;- select(Homo.sapiens, keys=geneid, columns=c(&quot;SYMBOL&quot;, &quot;TXCHROM&quot;, &quot;ENTREZID&quot;), 
+                keytype=&quot;ENSEMBL&quot;)
+genes &lt;- genes[!duplicated(genes$ENSEMBL),]
+counts$genes &lt;- genes
+
+#remove genes without ENTREZ IDs
+keep &lt;- !is.na(counts$genes$ENTREZID) &amp; !is.null(counts$genes$ENTREZID)
+counts &lt;- counts[keep, ]
+
+#generate library statistics
+cpm &lt;- cpm(counts)
+lcpm &lt;- cpm(counts, log=TRUE)
+L &lt;- mean(counts$samples$lib.size) * 1e-6
+M &lt;- median(counts$samples$lib.size) * 1e-6</code></pre>
+</div>
+<div id="quality-control" class="section level2">
+<h2>Quality control</h2>
+<p>Genes with no or low counts are unlikely to be biologically important, they provide little evidence for differential expression, and interfere with statistical approximations, so they were filtered out before performing the analysis. Genes with low or no counts (counts per million reads that corresponded to less than ~10 reads in any 7 samples (smallest group size)) were filtered out of the analysis, based on the recommendations in the edgeR documentation.</p>
+<pre class="r"><code>#filter out genes with low expression
+keep.exprs &lt;- filterByExpr(counts, group=counts$samples$group)
+counts_filtered &lt;- counts[keep.exprs,, keep.lib.sizes=FALSE]</code></pre>
+<p>Plotting the distribution of log-CPM values (below) showed that before filtering (A) many genes in each sample had low or no expression, with negative log-CPM values. These genes were removed from the analysis after filtering (B).</p>
+<pre class="r"><code>#make density plots for counts before and after filtering out genes with low expression
+par(mfrow = c(1,1))
+lcpmz &lt;- lcpm
+lcpm.cutoff &lt;- log2(10/M + 2/L)
+nsamples &lt;- ncol(counts)
+col &lt;- scales::hue_pal()(nsamples)
+plot(density(lcpm[,1]), col=col[1], lwd=2, ylim=c(0,0.3), las=2, main=&quot;&quot;, xlab=&quot;&quot;)
+  title(main=&quot;A. Raw data&quot;, xlab=&quot;Log-cpm&quot;)
+abline(v=lcpm.cutoff, lty=3)
+for (i in 2:nsamples){
+  den &lt;- density(lcpm[,i])
+  lines(den$x, den$y, col=col[i], lwd=2)
+}</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/denisty-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>lcpm2 &lt;- cpm(counts_filtered, log=TRUE)
+plot(density(lcpm2[,1]), col=col[1], lwd=2, ylim=c(0,0.3), las=2, main=&quot;&quot;, xlab=&quot;&quot;)
+title(main=&quot;B. Filtered data&quot;, xlab=&quot;Log-cpm&quot;)
+abline(v=lcpm.cutoff, lty=3)
+for (i in 2:nsamples){
+  den &lt;- density(lcpm2[,i])
+  lines(den$x, den$y, col=col[i], lwd=2)
+}</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/denisty-plot-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>TMM normalisation was applied to account for any highly expressed genes monopolising the sequencing and to account for the underlying differences in the distributions of expressed transcripts between samples.</p>
+<pre class="r"><code>#apply TMM normalisation
+counts &lt;- calcNormFactors(counts_filtered, method = &quot;TMM&quot;)</code></pre>
+<p>Effective library sizes varied from around 35 million reads to more than 60 million reads, with the median just under 48 million reads (A). The range and distribution of expression values look fairly uniform between samples, and TMM normalisation further improves this.</p>
+<pre class="r"><code>dat &lt;- data.frame(lib = counts$samples$lib.size,
+                  status = counts$samples$group,
+                  sample = colnames(counts))
+p1 &lt;- ggplot(dat, aes(x = sample, y = lib, fill = status)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = &quot;Sample&quot;, y = &quot;Library size&quot;,
+       fill = &quot;Prasugrel treatment&quot;, title = &quot;A. Library size after filtering&quot;) +
+  geom_hline(yintercept = median(dat$lib), linetype = &quot;dashed&quot;) +
+  scale_x_discrete(limits = dat$sample)
+
+dat &lt;- reshape2::melt(cpm(counts, normalized.lib.sizes = FALSE, log = TRUE),
+                      value.name = &quot;cpm&quot;)
+dat$status &lt;- rep(counts$samples$group, each = nrow(counts))
+colnames(dat)[2] &lt;- &quot;sample&quot;
+p2 &lt;- ggplot(dat, aes(x = sample, y = cpm, fill = status)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.75) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)) +
+  labs(x = &quot;Sample&quot;, y = &quot;Log-CPM&quot;,
+       fill = &quot;Prasugrel treatment&quot;, title = &quot;B. Expression values after filtering&quot;) +
+  geom_hline(yintercept = median(dat$lib), linetype = &quot;dashed&quot;)
+
+dat &lt;- reshape2::melt(cpm(counts, normalized.lib.sizes = TRUE, log = TRUE),
+                      value.name = &quot;cpm&quot;)
+
+dat$status &lt;- rep(counts$samples$group, each = nrow(counts))
+colnames(dat)[2] &lt;- &quot;sample&quot;
+p3 &lt;- ggplot(dat, aes(x = sample, y = cpm, fill = status)) +
+  geom_boxplot(show.legend = FALSE, outlier.size = 0.75) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)) +
+  labs(x = &quot;Sample&quot;, y = &quot;Log-CPM&quot;,
+       fill = &quot;Prasugrel treatment&quot;, title = &quot;C. Expression values after normalisation&quot;) +
+  geom_hline(yintercept = median(dat$lib), linetype = &quot;dashed&quot;)
+
+p1 / (p2 + p3) + plot_layout(guides = &quot;collect&quot;)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/expression-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Multi-dimensional scaling (MDS) plots show the largest sources of variation in the data. They are a good way of identifying structure in the data and exploring relationships between samples. The following plots examine the first four principle components coloured for known features of the data including prasugrel treatment, fetal sex, sequencing run, and placenta of origin. The samples do not cluster by prasugrel treatment, but within each pair of vehicle or prasugrel treated samples, the same shift in the first dimension is seen.</p>
+<pre class="r"><code>dims &lt;- list(c(1,2), c(1,3), c(2,3), c(3,4))
+vars &lt;- c(&quot;group&quot;, &quot;sex&quot;, &quot;run&quot;, &quot;placenta&quot;)
+patches &lt;- vector(&quot;list&quot;, length(vars))
+
+for(i in 1:length(vars)){
+  p &lt;- vector(&quot;list&quot;, length(dims))
+  
+  for(j in 1:length(dims)){
+    mds &lt;- plotMDS(cpm(counts, log = TRUE), top = 1000, gene.selection=&quot;common&quot;, 
+                   plot = FALSE, dim.plot = dims[[j]])
+    dat &lt;- tibble::tibble(x = mds$x, y = mds$y,
+                          sample = samplenames,
+                          variable = pull(counts$samples, vars[i]))
+    
+    p[[j]] &lt;- ggplot(dat, aes(x = x, y = y, colour = variable)) +
+      geom_text(aes(label = sample), size = 2.5) +
+      labs(x = glue::glue(&quot;Principal component {dims[[j]][1]}&quot;), 
+           y = glue::glue(&quot;Principal component {dims[[j]][2]}&quot;),
+           colour = vars[i])
+  }
+  
+  patches[[i]] &lt;- wrap_elements(wrap_plots(p, ncol = 2, guides = &quot;collect&quot;) +
+    plot_annotation(title = glue::glue(&quot;Coloured by: {vars[i]}&quot;)) &amp;
+    theme(legend.position = &quot;bottom&quot;))
+  
+}
+
+patches</code></pre>
+<pre><code>[[1]]</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/mds-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/mds-plot-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[3]]</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/mds-plot-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[4]]</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/mds-plot-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="differential-expression-analysis" class="section level2">
+<h2>Differential expression analysis</h2>
+<p>The prasugrel treated trophoblast samples were compared to those without prasugrel (vehicle) treatment, adjusting for placenta of origin (additive model). Negative binomial dispersion was estimated for the dataset, and differential expression was tested using the quasi-likelihood F-test. A summary of the number of differentially expressed genes (table 1) and their details (table 2) are shown below.</p>
+<pre class="r"><code>group &lt;- as.factor(counts$samples$group)
+placenta &lt;- as.factor(counts$samples$placenta)
+
+#set up design matrix to test hypertension status
+design1 &lt;- model.matrix(~placenta + group)
+colnames(design1) &lt;- gsub(&quot;group&quot;, &quot;&quot;, colnames(design1))
+rownames(design1) &lt;- samplenames
+
+#estimate dispersion
+counts &lt;- estimateDisp(counts, design1, robust=TRUE)
+
+plotBCV(counts, cex.lab = 1.5)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/edgeR-output-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>fit &lt;- glmQLFit(counts, design1)
+qlf &lt;- glmQLFTest(fit)
+
+plotQLDisp(fit, cex.lab = 1.5)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/edgeR-output-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>kable_styling(kable(summary(decideTests(qlf)), caption=&quot;Table 1: Number of differentially expressed genes&quot;))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 1: Number of differentially expressed genes
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Pras_100
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+9085
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2317
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>top_tags &lt;- data.frame(topTags(qlf, n=30, sort.by = &quot;P&quot;))
+kable_styling(kable(top_tags[,c(3,5,6,9)], caption=&quot;Table 2: Top 30 DE genes in prasugrel treated trophoblasts compared to vehicle treated&quot;))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 2: Top 30 DE genes in prasugrel treated trophoblasts compared to vehicle treated
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+SYMBOL
+</th>
+<th style="text-align:right;">
+logFC
+</th>
+<th style="text-align:right;">
+logCPM
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ENSG00000181019
+</td>
+<td style="text-align:left;">
+NQO1
+</td>
+<td style="text-align:right;">
+2.0612485
+</td>
+<td style="text-align:right;">
+6.095432
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000198431
+</td>
+<td style="text-align:left;">
+TXNRD1
+</td>
+<td style="text-align:right;">
+1.6953974
+</td>
+<td style="text-align:right;">
+10.492805
+</td>
+<td style="text-align:right;">
+4.00e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000087842
+</td>
+<td style="text-align:left;">
+PIR
+</td>
+<td style="text-align:right;">
+1.4266183
+</td>
+<td style="text-align:right;">
+5.730568
+</td>
+<td style="text-align:right;">
+6.00e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000168575
+</td>
+<td style="text-align:left;">
+SLC20A2
+</td>
+<td style="text-align:right;">
+0.8445675
+</td>
+<td style="text-align:right;">
+7.436638
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000001084
+</td>
+<td style="text-align:left;">
+GCLC
+</td>
+<td style="text-align:right;">
+0.6777747
+</td>
+<td style="text-align:right;">
+6.151755
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000104687
+</td>
+<td style="text-align:left;">
+GSR
+</td>
+<td style="text-align:right;">
+1.1494357
+</td>
+<td style="text-align:right;">
+7.529069
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000138792
+</td>
+<td style="text-align:left;">
+ENPEP
+</td>
+<td style="text-align:right;">
+0.7730880
+</td>
+<td style="text-align:right;">
+5.141415
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000142686
+</td>
+<td style="text-align:left;">
+C1orf216
+</td>
+<td style="text-align:right;">
+0.9808610
+</td>
+<td style="text-align:right;">
+3.224342
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000140961
+</td>
+<td style="text-align:left;">
+OSGIN1
+</td>
+<td style="text-align:right;">
+2.3791904
+</td>
+<td style="text-align:right;">
+5.221038
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000117298
+</td>
+<td style="text-align:left;">
+ECE1
+</td>
+<td style="text-align:right;">
+-0.7903481
+</td>
+<td style="text-align:right;">
+6.727133
+</td>
+<td style="text-align:right;">
+3.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000131389
+</td>
+<td style="text-align:left;">
+SLC6A6
+</td>
+<td style="text-align:right;">
+1.9292464
+</td>
+<td style="text-align:right;">
+4.664087
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000161011
+</td>
+<td style="text-align:left;">
+SQSTM1
+</td>
+<td style="text-align:right;">
+0.9042232
+</td>
+<td style="text-align:right;">
+12.197480
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000230937
+</td>
+<td style="text-align:left;">
+MIR205HG
+</td>
+<td style="text-align:right;">
+-1.3751473
+</td>
+<td style="text-align:right;">
+4.992119
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000079999
+</td>
+<td style="text-align:left;">
+KEAP1
+</td>
+<td style="text-align:right;">
+0.7602292
+</td>
+<td style="text-align:right;">
+6.505135
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000087086
+</td>
+<td style="text-align:left;">
+FTL
+</td>
+<td style="text-align:right;">
+0.9964752
+</td>
+<td style="text-align:right;">
+10.908758
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000117676
+</td>
+<td style="text-align:left;">
+RPS6KA1
+</td>
+<td style="text-align:right;">
+1.0327653
+</td>
+<td style="text-align:right;">
+3.454513
+</td>
+<td style="text-align:right;">
+3.50e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000137261
+</td>
+<td style="text-align:left;">
+KIAA0319
+</td>
+<td style="text-align:right;">
+1.6287540
+</td>
+<td style="text-align:right;">
+4.327658
+</td>
+<td style="text-align:right;">
+4.20e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000163141
+</td>
+<td style="text-align:left;">
+BNIPL
+</td>
+<td style="text-align:right;">
+-1.2542831
+</td>
+<td style="text-align:right;">
+2.860858
+</td>
+<td style="text-align:right;">
+4.60e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000166833
+</td>
+<td style="text-align:left;">
+NAV2
+</td>
+<td style="text-align:right;">
+-0.5546742
+</td>
+<td style="text-align:right;">
+8.072220
+</td>
+<td style="text-align:right;">
+4.90e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000142657
+</td>
+<td style="text-align:left;">
+PGD
+</td>
+<td style="text-align:right;">
+1.0140788
+</td>
+<td style="text-align:right;">
+7.336151
+</td>
+<td style="text-align:right;">
+6.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000184106
+</td>
+<td style="text-align:left;">
+TREML3P
+</td>
+<td style="text-align:right;">
+2.5596815
+</td>
+<td style="text-align:right;">
+2.145436
+</td>
+<td style="text-align:right;">
+7.80e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000177989
+</td>
+<td style="text-align:left;">
+ODF3B
+</td>
+<td style="text-align:right;">
+-1.3207242
+</td>
+<td style="text-align:right;">
+1.899260
+</td>
+<td style="text-align:right;">
+7.80e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000123933
+</td>
+<td style="text-align:left;">
+MXD4
+</td>
+<td style="text-align:right;">
+-0.7369012
+</td>
+<td style="text-align:right;">
+5.875830
+</td>
+<td style="text-align:right;">
+7.80e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000136810
+</td>
+<td style="text-align:left;">
+TXN
+</td>
+<td style="text-align:right;">
+0.6110096
+</td>
+<td style="text-align:right;">
+7.904472
+</td>
+<td style="text-align:right;">
+7.80e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000118777
+</td>
+<td style="text-align:left;">
+ABCG2
+</td>
+<td style="text-align:right;">
+1.1055500
+</td>
+<td style="text-align:right;">
+5.768859
+</td>
+<td style="text-align:right;">
+8.20e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000066926
+</td>
+<td style="text-align:left;">
+FECH
+</td>
+<td style="text-align:right;">
+0.8431137
+</td>
+<td style="text-align:right;">
+6.334281
+</td>
+<td style="text-align:right;">
+8.20e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000170345
+</td>
+<td style="text-align:left;">
+FOS
+</td>
+<td style="text-align:right;">
+-0.7560590
+</td>
+<td style="text-align:right;">
+5.043242
+</td>
+<td style="text-align:right;">
+8.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000105929
+</td>
+<td style="text-align:left;">
+ATP6V0A4
+</td>
+<td style="text-align:right;">
+-1.1584084
+</td>
+<td style="text-align:right;">
+2.539626
+</td>
+<td style="text-align:right;">
+8.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000187608
+</td>
+<td style="text-align:left;">
+ISG15
+</td>
+<td style="text-align:right;">
+-1.7655893
+</td>
+<td style="text-align:right;">
+4.733510
+</td>
+<td style="text-align:right;">
+9.40e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000188042
+</td>
+<td style="text-align:left;">
+ARL4C
+</td>
+<td style="text-align:right;">
+0.6253518
+</td>
+<td style="text-align:right;">
+4.790379
+</td>
+<td style="text-align:right;">
+1.02e-05
+</td>
+</tr>
+</tbody>
+</table>
+<p>Since so many DE genes were identified, a logFC cut-off was applied using the <code>treat</code> method (McCarthy and Smyth 2009), which can be used to calculate p-values from empirical Bayes moderated t-statistics with a minimum log-FC requirement. The cutoff was set to 1. A summary of the number of differentially expressed genes (table 3) and their details (table 4) are shown below.</p>
+<pre class="r"><code>tr &lt;- glmTreat(fit, lfc=1)
+kable_styling(kable(summary(decideTests(tr)), caption=&quot;Table 3: Number of differentially expressed genes from treat method&quot;))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 3: Number of differentially expressed genes from treat method
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Pras_100
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NotSig
+</td>
+<td style="text-align:right;">
+14075
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>top_treat &lt;- data.frame(topTags(tr, n=25, sort.by = &quot;P&quot;))
+write.csv(top_treat, &quot;./docs/DGE_lists/edgeR_treat.csv&quot;)
+kable_styling(kable(top_treat[,c(3,5,6,9)], caption=&quot;Table 4: DE genes in prasugrel treated trophoblasts compared to vehicle treated with treat method&quot;))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Table 4: DE genes in prasugrel treated trophoblasts compared to vehicle treated with treat method
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+SYMBOL
+</th>
+<th style="text-align:right;">
+logFC
+</th>
+<th style="text-align:right;">
+unshrunk.logFC
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ENSG00000181019
+</td>
+<td style="text-align:left;">
+NQO1
+</td>
+<td style="text-align:right;">
+2.061249
+</td>
+<td style="text-align:right;">
+2.061414
+</td>
+<td style="text-align:right;">
+0.0000001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000198431
+</td>
+<td style="text-align:left;">
+TXNRD1
+</td>
+<td style="text-align:right;">
+1.695397
+</td>
+<td style="text-align:right;">
+1.695402
+</td>
+<td style="text-align:right;">
+0.0002422
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000140961
+</td>
+<td style="text-align:left;">
+OSGIN1
+</td>
+<td style="text-align:right;">
+2.379190
+</td>
+<td style="text-align:right;">
+2.379532
+</td>
+<td style="text-align:right;">
+0.0002766
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000184106
+</td>
+<td style="text-align:left;">
+TREML3P
+</td>
+<td style="text-align:right;">
+2.559681
+</td>
+<td style="text-align:right;">
+2.563169
+</td>
+<td style="text-align:right;">
+0.0007262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000131389
+</td>
+<td style="text-align:left;">
+SLC6A6
+</td>
+<td style="text-align:right;">
+1.929246
+</td>
+<td style="text-align:right;">
+1.929527
+</td>
+<td style="text-align:right;">
+0.0007262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000156510
+</td>
+<td style="text-align:left;">
+HKDC1
+</td>
+<td style="text-align:right;">
+4.095326
+</td>
+<td style="text-align:right;">
+4.163204
+</td>
+<td style="text-align:right;">
+0.0007262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000111335
+</td>
+<td style="text-align:left;">
+OAS2
+</td>
+<td style="text-align:right;">
+-2.728180
+</td>
+<td style="text-align:right;">
+-2.729079
+</td>
+<td style="text-align:right;">
+0.0012635
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000087842
+</td>
+<td style="text-align:left;">
+PIR
+</td>
+<td style="text-align:right;">
+1.426618
+</td>
+<td style="text-align:right;">
+1.426708
+</td>
+<td style="text-align:right;">
+0.0030850
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000137959
+</td>
+<td style="text-align:left;">
+IFI44L
+</td>
+<td style="text-align:right;">
+-2.564668
+</td>
+<td style="text-align:right;">
+-2.566552
+</td>
+<td style="text-align:right;">
+0.0049216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000108448
+</td>
+<td style="text-align:left;">
+TRIM16L
+</td>
+<td style="text-align:right;">
+1.941368
+</td>
+<td style="text-align:right;">
+1.941830
+</td>
+<td style="text-align:right;">
+0.0049216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000183486
+</td>
+<td style="text-align:left;">
+MX2
+</td>
+<td style="text-align:right;">
+-2.182737
+</td>
+<td style="text-align:right;">
+-2.184433
+</td>
+<td style="text-align:right;">
+0.0049216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000137261
+</td>
+<td style="text-align:left;">
+KIAA0319
+</td>
+<td style="text-align:right;">
+1.628754
+</td>
+<td style="text-align:right;">
+1.629094
+</td>
+<td style="text-align:right;">
+0.0049216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000187608
+</td>
+<td style="text-align:left;">
+ISG15
+</td>
+<td style="text-align:right;">
+-1.765589
+</td>
+<td style="text-align:right;">
+-1.765865
+</td>
+<td style="text-align:right;">
+0.0049216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000132530
+</td>
+<td style="text-align:left;">
+XAF1
+</td>
+<td style="text-align:right;">
+-2.120836
+</td>
+<td style="text-align:right;">
+-2.121344
+</td>
+<td style="text-align:right;">
+0.0056334
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000125462
+</td>
+<td style="text-align:left;">
+C1orf61
+</td>
+<td style="text-align:right;">
+1.955360
+</td>
+<td style="text-align:right;">
+1.958667
+</td>
+<td style="text-align:right;">
+0.0114918
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000151632
+</td>
+<td style="text-align:left;">
+AKR1C2
+</td>
+<td style="text-align:right;">
+2.580518
+</td>
+<td style="text-align:right;">
+2.594289
+</td>
+<td style="text-align:right;">
+0.0114918
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000023909
+</td>
+<td style="text-align:left;">
+GCLM
+</td>
+<td style="text-align:right;">
+1.733486
+</td>
+<td style="text-align:right;">
+1.733553
+</td>
+<td style="text-align:right;">
+0.0130447
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000185885
+</td>
+<td style="text-align:left;">
+IFITM1
+</td>
+<td style="text-align:right;">
+-2.101021
+</td>
+<td style="text-align:right;">
+-2.111532
+</td>
+<td style="text-align:right;">
+0.0177260
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000166676
+</td>
+<td style="text-align:left;">
+TVP23A
+</td>
+<td style="text-align:right;">
+2.594201
+</td>
+<td style="text-align:right;">
+2.607788
+</td>
+<td style="text-align:right;">
+0.0209898
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000100292
+</td>
+<td style="text-align:left;">
+HMOX1
+</td>
+<td style="text-align:right;">
+2.059987
+</td>
+<td style="text-align:right;">
+2.059995
+</td>
+<td style="text-align:right;">
+0.0209898
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000173110
+</td>
+<td style="text-align:left;">
+HSPA6
+</td>
+<td style="text-align:right;">
+3.246822
+</td>
+<td style="text-align:right;">
+3.259280
+</td>
+<td style="text-align:right;">
+0.0243058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000108846
+</td>
+<td style="text-align:left;">
+ABCC3
+</td>
+<td style="text-align:right;">
+1.738847
+</td>
+<td style="text-align:right;">
+1.744782
+</td>
+<td style="text-align:right;">
+0.0265648
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000111319
+</td>
+<td style="text-align:left;">
+SCNN1A
+</td>
+<td style="text-align:right;">
+-1.600425
+</td>
+<td style="text-align:right;">
+-1.601479
+</td>
+<td style="text-align:right;">
+0.0265648
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000230937
+</td>
+<td style="text-align:left;">
+MIR205HG
+</td>
+<td style="text-align:right;">
+-1.375147
+</td>
+<td style="text-align:right;">
+-1.375344
+</td>
+<td style="text-align:right;">
+0.0368590
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ENSG00000157601
+</td>
+<td style="text-align:left;">
+MX1
+</td>
+<td style="text-align:right;">
+-1.823632
+</td>
+<td style="text-align:right;">
+-1.823750
+</td>
+<td style="text-align:right;">
+0.0410797
+</td>
+</tr>
+</tbody>
+</table>
+<p>The heatmap below shows that samples cluster within their treatment groups and up and down-regulated genes cluster separately.</p>
+<pre class="r"><code>logCPM &lt;- cpm(counts, prior.count=2, log=TRUE)
+rownames(logCPM) &lt;- counts$genes$SYMBOL
+colnames(logCPM) &lt;- paste(counts$samples$group)
+o &lt;- order(tr$table$PValue)
+logCPM &lt;- logCPM[o[1:51],]
+logCPM &lt;- t(scale(t(logCPM)))
+library(gplots)
+col.pan &lt;- colorpanel(100, &quot;blue&quot;, &quot;white&quot;, &quot;red&quot;)
+heatmap.2(logCPM, col=col.pan, Rowv=TRUE, scale=&quot;none&quot;, trace=&quot;none&quot;, dendrogram=&quot;both&quot;, cexRow=0.7, cexCol=1, density.info=&quot;none&quot;)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The volcano plot below shows the statistical significance versus the logFC of genes in the differential expression analysis. Genes with FDR &lt; 0.05 are coloured in red.</p>
+<pre class="r"><code>data.frame(topTags(tr, n=Inf)) %&gt;% mutate(sig = ifelse(FDR &lt;= 0.05, &quot;&lt;= 0.05&quot;, &quot;&gt; 0.05&quot;)) -&gt; dat
+
+ggplot(dat, aes(x = logFC, y = -log10(PValue), color = sig)) +
+  geom_point(alpha = 0.75) +
+  ggrepel::geom_text_repel(data = subset(dat, FDR &lt; 0.05), 
+            aes(x = logFC, y = -log10(PValue), 
+                label = SYMBOL), 
+            size = 2, colour = &quot;black&quot;, max.overlaps = 15) +
+  labs(x = expression(~log[2]~&quot;(Fold Change)&quot;), 
+       y = expression(~-log[10]~&quot;(P-value)&quot;),
+       colour = &quot;FDR&quot;) +
+  scale_colour_brewer(palette = &quot;Set1&quot;)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/volcano-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The following plots show the counts (per million) of the top 12 differentially expressed genes identified as being altered in trophoblast cells with prasugrel treatment. Grey lines connecting the samples isolated from the same placenta (matched treatment (Pras_100) and vehicle (Pras_0)) show that although between placentas there is variability in the expression level of these genes, in all cases these genes responded in the same way to prasugrel treatment in cells isolated from each of the seven placentas.</p>
+<pre class="r"><code>dat &lt;- reshape2::melt(cpm(counts, log = TRUE),
+                      value.name = &quot;cpm&quot;)
+dat$group &lt;- rep(counts$samples$group, each = nrow(counts))
+dat$gene &lt;- rep(counts$genes$SYMBOL, ncol(counts))
+top &lt;- data.frame(top_treat)
+
+p &lt;- vector(&quot;list&quot;, 12)
+
+for(i in 1:length(p)){
+  p[[i]] &lt;- ggplot(data = subset(dat, dat$gene == top$SYMBOL[i]), 
+       aes(x = group, y = cpm, colour = group)) +
+  geom_point(aes(color = group)) +
+  geom_line(aes(group = placenta),color=&quot;grey&quot;) +
+  stat_summary(fun = &quot;mean&quot;, geom = &quot;crossbar&quot;) +
+  labs(x = &quot;Treatment&quot;, y = &quot;log2 CPM&quot;, colour = &quot;Treatment&quot;) +
+  ggtitle(top$SYMBOL[i]) +
+  theme(plot.title = element_text(size = 8),
+        plot.subtitle = element_text(size = 7),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 7))
+}
+
+wrap_plots(p, guides = &quot;collect&quot;, ncol = 4) &amp; 
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/gene-expression-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gene-set-enrichment-analysis" class="section level2">
+<h2>Gene set enrichment analysis</h2>
+<p>Testing for enrichment of Gene Ontology (GO) categories among statistically significant differentially expressed genes (with larger logFC) using <code>goana</code>.</p>
+<pre class="r"><code>go &lt;- goana(top$ENTREZID[top$FDR &lt; 0.05], universe = counts$genes$entrezid)
+goana_treat &lt;- topGO(go, number = Inf) %&gt;%
+  mutate(FDR = p.adjust(P.DE)) %&gt;%
+  dplyr::filter(FDR &lt; 0.05)
+write.csv(goana_treat, &quot;./docs/goana_output/goana_treat.csv&quot;, row.names = TRUE)
+kable_styling(knitr::kable(goana_treat, format.args = list(scientific = -1), digits = 50))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Term
+</th>
+<th style="text-align:left;">
+Ont
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:right;">
+DE
+</th>
+<th style="text-align:right;">
+P.DE
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0071357" class="uri">GO:0071357</a>
+</td>
+<td style="text-align:left;">
+cellular response to type I interferon
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8.021923e-10
+</td>
+<td style="text-align:right;">
+1.837903e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0060337" class="uri">GO:0060337</a>
+</td>
+<td style="text-align:left;">
+type I interferon signaling pathway
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+8.021923e-10
+</td>
+<td style="text-align:right;">
+1.837903e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0034340" class="uri">GO:0034340</a>
+</td>
+<td style="text-align:left;">
+response to type I interferon
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+99
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.031309e-09
+</td>
+<td style="text-align:right;">
+2.362625e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0051607" class="uri">GO:0051607</a>
+</td>
+<td style="text-align:left;">
+defense response to virus
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+238
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.974035e-07
+</td>
+<td style="text-align:right;">
+4.522119e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0009615" class="uri">GO:0009615</a>
+</td>
+<td style="text-align:left;">
+response to virus
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+326
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.245321e-06
+</td>
+<td style="text-align:right;">
+2.852656e-02
+</td>
+</tr>
+</tbody>
+</table>
+<p>All five categories involve viral response or interferon signalling, and are highly likely to be overlapping GO categories, so while this is informative, it only provides one lead.</p>
+<p>When testing for enrichment of GO categories among all statistically significant genes (regardless of logFC), many more categories were identified (below), but they are not very specific.</p>
+<pre class="r"><code>top &lt;- data.frame(topTags(qlf, n=Inf, sort.by = &quot;P&quot;))
+go_all &lt;- goana(top$ENTREZID[top$FDR &lt; 0.05], universe = counts$genes$entrezid)
+goana_all &lt;- topGO(go_all, number =Inf) %&gt;%
+  mutate(FDR = p.adjust(P.DE)) %&gt;%
+  dplyr::filter(FDR &lt; 0.05)
+write.csv(goana_all, &quot;./docs/goana_output/goana_all.csv&quot;, row.names = TRUE)
+kable_styling(kable(goana_all[1:30,], format.args = list(scientific = -1), digits = 50))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Term
+</th>
+<th style="text-align:left;">
+Ont
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:right;">
+DE
+</th>
+<th style="text-align:right;">
+P.DE
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005737" class="uri">GO:0005737</a>
+</td>
+<td style="text-align:left;">
+cytoplasm
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+11625
+</td>
+<td style="text-align:right;">
+3355
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044444" class="uri">GO:0044444</a>
+</td>
+<td style="text-align:left;">
+cytoplasmic part
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+9735
+</td>
+<td style="text-align:right;">
+2888
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005622" class="uri">GO:0005622</a>
+</td>
+<td style="text-align:left;">
+intracellular
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+15073
+</td>
+<td style="text-align:right;">
+3992
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044424" class="uri">GO:0044424</a>
+</td>
+<td style="text-align:left;">
+intracellular part
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+15063
+</td>
+<td style="text-align:right;">
+3987
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005515" class="uri">GO:0005515</a>
+</td>
+<td style="text-align:left;">
+protein binding
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+11807
+</td>
+<td style="text-align:right;">
+3297
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005488" class="uri">GO:0005488</a>
+</td>
+<td style="text-align:left;">
+binding
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+15267
+</td>
+<td style="text-align:right;">
+3969
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0003674" class="uri">GO:0003674</a>
+</td>
+<td style="text-align:left;">
+molecular_function
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+17697
+</td>
+<td style="text-align:right;">
+4402
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005829" class="uri">GO:0005829</a>
+</td>
+<td style="text-align:left;">
+cytosol
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+5085
+</td>
+<td style="text-align:right;">
+1654
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043229" class="uri">GO:0043229</a>
+</td>
+<td style="text-align:left;">
+intracellular organelle
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+13294
+</td>
+<td style="text-align:right;">
+3555
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043226" class="uri">GO:0043226</a>
+</td>
+<td style="text-align:left;">
+organelle
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+14144
+</td>
+<td style="text-align:right;">
+3713
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043227" class="uri">GO:0043227</a>
+</td>
+<td style="text-align:left;">
+membrane-bounded organelle
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+13019
+</td>
+<td style="text-align:right;">
+3473
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043231" class="uri">GO:0043231</a>
+</td>
+<td style="text-align:left;">
+intracellular membrane-bounded organelle
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+11488
+</td>
+<td style="text-align:right;">
+3136
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044446" class="uri">GO:0044446</a>
+</td>
+<td style="text-align:left;">
+intracellular organelle part
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+9811
+</td>
+<td style="text-align:right;">
+2751
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044422" class="uri">GO:0044422</a>
+</td>
+<td style="text-align:left;">
+organelle part
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+10112
+</td>
+<td style="text-align:right;">
+2803
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0003824" class="uri">GO:0003824</a>
+</td>
+<td style="text-align:left;">
+catalytic activity
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+5710
+</td>
+<td style="text-align:right;">
+1723
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+6.970000e-48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005623" class="uri">GO:0005623</a>
+</td>
+<td style="text-align:left;">
+cell
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+17590
+</td>
+<td style="text-align:right;">
+4313
+</td>
+<td style="text-align:right;">
+1.910000e-48
+</td>
+<td style="text-align:right;">
+4.382993e-44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044464" class="uri">GO:0044464</a>
+</td>
+<td style="text-align:left;">
+cell part
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+17521
+</td>
+<td style="text-align:right;">
+4295
+</td>
+<td style="text-align:right;">
+1.227600e-46
+</td>
+<td style="text-align:right;">
+2.810671e-42
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0005654" class="uri">GO:0005654</a>
+</td>
+<td style="text-align:left;">
+nucleoplasm
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+3512
+</td>
+<td style="text-align:right;">
+1127
+</td>
+<td style="text-align:right;">
+8.116979e-44
+</td>
+<td style="text-align:right;">
+1.858301e-39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0070013" class="uri">GO:0070013</a>
+</td>
+<td style="text-align:left;">
+intracellular organelle lumen
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+5740
+</td>
+<td style="text-align:right;">
+1672
+</td>
+<td style="text-align:right;">
+2.517605e-39
+</td>
+<td style="text-align:right;">
+5.763553e-35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0031974" class="uri">GO:0031974</a>
+</td>
+<td style="text-align:left;">
+membrane-enclosed lumen
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+5740
+</td>
+<td style="text-align:right;">
+1672
+</td>
+<td style="text-align:right;">
+2.517605e-39
+</td>
+<td style="text-align:right;">
+5.763553e-35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043233" class="uri">GO:0043233</a>
+</td>
+<td style="text-align:left;">
+organelle lumen
+</td>
+<td style="text-align:left;">
+CC
+</td>
+<td style="text-align:right;">
+5740
+</td>
+<td style="text-align:right;">
+1672
+</td>
+<td style="text-align:right;">
+2.517605e-39
+</td>
+<td style="text-align:right;">
+5.763553e-35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:1901564" class="uri">GO:1901564</a>
+</td>
+<td style="text-align:left;">
+organonitrogen compound metabolic process
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+7040
+</td>
+<td style="text-align:right;">
+1985
+</td>
+<td style="text-align:right;">
+8.813155e-39
+</td>
+<td style="text-align:right;">
+2.017331e-34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044237" class="uri">GO:0044237</a>
+</td>
+<td style="text-align:left;">
+cellular metabolic process
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+11301
+</td>
+<td style="text-align:right;">
+2968
+</td>
+<td style="text-align:right;">
+3.042249e-38
+</td>
+<td style="text-align:right;">
+6.963404e-34
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0071840" class="uri">GO:0071840</a>
+</td>
+<td style="text-align:left;">
+cellular component organization or biogenesis
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+6697
+</td>
+<td style="text-align:right;">
+1895
+</td>
+<td style="text-align:right;">
+2.515398e-37
+</td>
+<td style="text-align:right;">
+5.757243e-33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044260" class="uri">GO:0044260</a>
+</td>
+<td style="text-align:left;">
+cellular macromolecule metabolic process
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+8352
+</td>
+<td style="text-align:right;">
+2277
+</td>
+<td style="text-align:right;">
+3.014372e-35
+</td>
+<td style="text-align:right;">
+6.898993e-31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0044267" class="uri">GO:0044267</a>
+</td>
+<td style="text-align:left;">
+cellular protein metabolic process
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+5276
+</td>
+<td style="text-align:right;">
+1532
+</td>
+<td style="text-align:right;">
+3.258112e-34
+</td>
+<td style="text-align:right;">
+7.456514e-30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0000166" class="uri">GO:0000166</a>
+</td>
+<td style="text-align:left;">
+nucleotide binding
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+2125
+</td>
+<td style="text-align:right;">
+714
+</td>
+<td style="text-align:right;">
+4.163935e-33
+</td>
+<td style="text-align:right;">
+9.529165e-29
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:1901265" class="uri">GO:1901265</a>
+</td>
+<td style="text-align:left;">
+nucleoside phosphate binding
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+2126
+</td>
+<td style="text-align:right;">
+714
+</td>
+<td style="text-align:right;">
+4.917899e-33
+</td>
+<td style="text-align:right;">
+1.125412e-28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0036094" class="uri">GO:0036094</a>
+</td>
+<td style="text-align:left;">
+small molecule binding
+</td>
+<td style="text-align:left;">
+MF
+</td>
+<td style="text-align:right;">
+2503
+</td>
+<td style="text-align:right;">
+812
+</td>
+<td style="text-align:right;">
+4.788535e-32
+</td>
+<td style="text-align:right;">
+1.095760e-27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="GO:0043412" class="uri">GO:0043412</a>
+</td>
+<td style="text-align:left;">
+macromolecule modification
+</td>
+<td style="text-align:left;">
+BP
+</td>
+<td style="text-align:right;">
+4373
+</td>
+<td style="text-align:right;">
+1289
+</td>
+<td style="text-align:right;">
+1.049474e-30
+</td>
+<td style="text-align:right;">
+2.401407e-26
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>camera</code> function performs a competitive test to find if genes in a given set are highly ranked in terms of differential expression compared to genes that are not in that set. In the output below we tested gene sets from the Molecular Signatures Database (<a href="https://www.gsea-msigdb.org/gsea/msigdb/index.jsp_">MSigDB</a>).</p>
+<p>MSigDB genesets from version 7.1 in R format were downloaded <a href="https://bioinf.wehi.edu.au/MSigDB/v7.1/">here</a> for this analysis. We looked at GO gene sets, Hallmark gene sets and curated gene sets.</p>
+<p>The GO gene sets consist of genes annotated by the same GO terms.</p>
+<pre class="r"><code>GO &lt;- readRDS(&quot;./data/MSigDB/Hs.c5.all.v7.1.entrez.rds&quot;, refhook = NULL)
+idx &lt;- ids2indices(GO, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_GO &lt;- camera(counts,idx,design1)
+write.csv(cam_GO[cam_GO$FDR &lt; 0.05,], &quot;./docs/camera_output/GO.csv&quot;, row.names = TRUE)
+kable_styling(kable(cam_GO[cam_GO$FDR &lt; 0.05,][1:30,], format.args = list(scientific = -1), digits = 50))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+NGenes
+</th>
+<th style="text-align:left;">
+Direction
+</th>
+<th style="text-align:right;">
+PValue
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+GO_PRERIBOSOME
+</td>
+<td style="text-align:right;">
+76
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4.758392e-13
+</td>
+<td style="text-align:right;">
+4.827864e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RIBOSOME_BIOGENESIS
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4.583970e-10
+</td>
+<td style="text-align:right;">
+2.325448e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RRNA_METABOLIC_PROCESS
+</td>
+<td style="text-align:right;">
+216
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+7.286976e-10
+</td>
+<td style="text-align:right;">
+2.464455e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_OXIDOREDUCTASE_ACTIVITY_ACTING_ON_NAD_P_H_HEME_PROTEIN_AS_ACCEPTOR
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.678593e-09
+</td>
+<td style="text-align:right;">
+6.794252e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RIBONUCLEOPROTEIN_COMPLEX_BIOGENESIS
+</td>
+<td style="text-align:right;">
+402
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+5.381667e-09
+</td>
+<td style="text-align:right;">
+1.092048e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_NCRNA_PROCESSING
+</td>
+<td style="text-align:right;">
+361
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+7.595522e-09
+</td>
+<td style="text-align:right;">
+1.284403e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_CHAPERONE_COMPLEX
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.738865e-08
+</td>
+<td style="text-align:right;">
+2.520360e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_NEGATIVE_REGULATION_OF_VIRAL_GENOME_REPLICATION
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2.194988e-08
+</td>
+<td style="text-align:right;">
+2.563324e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_SMALL_SUBUNIT_PROCESSOME
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.273795e-08
+</td>
+<td style="text-align:right;">
+2.563324e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_ENDOPEPTIDASE_COMPLEX
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.786350e-08
+</td>
+<td style="text-align:right;">
+2.751790e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_NCRNA_METABOLIC_PROCESS
+</td>
+<td style="text-align:right;">
+442
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.983412e-08
+</td>
+<td style="text-align:right;">
+2.751790e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_PEPTIDASE_COMPLEX
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+3.592010e-08
+</td>
+<td style="text-align:right;">
+3.037044e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_INTERFERON_GAMMA_MEDIATED_SIGNALING_PATHWAY
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+4.795718e-08
+</td>
+<td style="text-align:right;">
+3.701403e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_CYTOCHROME_B5_REDUCTASE_ACTIVITY_ACTING_ON_NAD_P_H
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+5.107397e-08
+</td>
+<td style="text-align:right;">
+3.701403e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_HEPATIC_STELLATE_CELL_ACTIVATION
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+6.872863e-08
+</td>
+<td style="text-align:right;">
+4.648805e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_CELLULAR_RESPONSE_TO_OXYGEN_RADICAL
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+7.669039e-08
+</td>
+<td style="text-align:right;">
+4.863129e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_REGULATION_OF_CELLULAR_AMINO_ACID_METABOLIC_PROCESS
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+9.979675e-08
+</td>
+<td style="text-align:right;">
+5.956105e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RESPONSE_TO_TYPE_I_INTERFERON
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.270992e-07
+</td>
+<td style="text-align:right;">
+7.164160e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_PRERIBOSOME_LARGE_SUBUNIT_PRECURSOR
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.639207e-07
+</td>
+<td style="text-align:right;">
+8.753363e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_NEGATIVE_REGULATION_OF_VIRAL_LIFE_CYCLE
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2.440790e-07
+</td>
+<td style="text-align:right;">
+1.238213e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RESPONSE_TO_OXYGEN_RADICAL
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4.039691e-07
+</td>
+<td style="text-align:right;">
+1.903867e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_MITOCHONDRIAL_GENE_EXPRESSION
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4.128236e-07
+</td>
+<td style="text-align:right;">
+1.903867e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_CILIARY_TRANSITION_ZONE
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.706572e-07
+</td>
+<td style="text-align:right;">
+2.517343e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_REGULATION_OF_CELLULAR_RESPONSE_TO_HEAT
+</td>
+<td style="text-align:right;">
+76
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.210885e-06
+</td>
+<td style="text-align:right;">
+5.119014e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_RESPONSE_TO_HEAT
+</td>
+<td style="text-align:right;">
+146
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.351137e-06
+</td>
+<td style="text-align:right;">
+5.483454e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_REGULATION_OF_CELLULAR_AMINE_METABOLIC_PROCESS
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.457802e-06
+</td>
+<td style="text-align:right;">
+5.668971e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_NEGATIVE_REGULATION_OF_VIRAL_PROCESS
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.589717e-06
+</td>
+<td style="text-align:right;">
+5.668971e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_TRNA_METABOLIC_PROCESS
+</td>
+<td style="text-align:right;">
+181
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.638318e-06
+</td>
+<td style="text-align:right;">
+5.668971e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_OXIDOREDUCTASE_ACTIVITY_ACTING_ON_A_SULFUR_GROUP_OF_DONORS_NAD_P_AS_ACCEPTOR
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.669085e-06
+</td>
+<td style="text-align:right;">
+5.668971e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO_MATURATION_OF_SSU_RRNA
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.683024e-06
+</td>
+<td style="text-align:right;">
+5.668971e-04
+</td>
+</tr>
+</tbody>
+</table>
+<p>The Hallmark gene sets are coherently expressed signatures derived by aggregating many MSigDB gene sets to represent well-defined biological states or processes.</p>
+<pre class="r"><code>hallmark &lt;- readRDS(&quot;./data/MSigDB/Hs.h.all.v7.1.entrez.rds&quot;, refhook = NULL)
+idx &lt;- ids2indices(hallmark, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_h &lt;- camera(counts,idx,design1)
+write.csv(cam_h[cam_h$FDR &lt; 0.05,], &quot;./docs/camera_output/hallmark.csv&quot;, row.names = TRUE)
+kable_styling(kable(cam_h[cam_h$FDR &lt; 0.05,], format.args = list(scientific = -1), digits = 50))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+NGenes
+</th>
+<th style="text-align:left;">
+Direction
+</th>
+<th style="text-align:right;">
+PValue
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+HALLMARK_INTERFERON_ALPHA_RESPONSE
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2.929335e-26
+</td>
+<td style="text-align:right;">
+1.464667e-24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_INTERFERON_GAMMA_RESPONSE
+</td>
+<td style="text-align:right;">
+168
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+3.240163e-16
+</td>
+<td style="text-align:right;">
+8.100407e-15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_REACTIVE_OXYGEN_SPECIES_PATHWAY
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+7.940088e-13
+</td>
+<td style="text-align:right;">
+1.323348e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_MYC_TARGETS_V2
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.774159e-11
+</td>
+<td style="text-align:right;">
+3.467699e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_MTORC1_SIGNALING
+</td>
+<td style="text-align:right;">
+196
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.675928e-08
+</td>
+<td style="text-align:right;">
+1.675928e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_MYC_TARGETS_V1
+</td>
+<td style="text-align:right;">
+198
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.858514e-07
+</td>
+<td style="text-align:right;">
+1.548762e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_UNFOLDED_PROTEIN_RESPONSE
+</td>
+<td style="text-align:right;">
+112
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.640691e-04
+</td>
+<td style="text-align:right;">
+1.886208e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_COAGULATION
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.648920e-04
+</td>
+<td style="text-align:right;">
+3.530575e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_APICAL_SURFACE
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.472677e-03
+</td>
+<td style="text-align:right;">
+8.181541e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HALLMARK_XENOBIOTIC_METABOLISM
+</td>
+<td style="text-align:right;">
+151
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.874529e-03
+</td>
+<td style="text-align:right;">
+9.372646e-03
+</td>
+</tr>
+</tbody>
+</table>
+<p>The barcode plots below show the enrichment of genes among the up and down regulated genes in the top four hallmark gene sets identified by the camera analysis. The black bars represent the logFC of each of the genes, with down regulated genes at the left and up regulated genes at the right of each plot. The enrichment worm at the top of the plot shows the relative enrichment of the genes in each part of the plot.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+sapply(1:4, function(i){
+  barcodeplot(qlf$table$logFC, index=idx[[rownames(cam_h)[i]]], 
+              main = rownames(cam_h)[i], cex.main = 0.75)
+})</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/hallmark_barcode-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+
+[[4]]
+NULL</code></pre>
+<p>The curated gene sets are compiled from online pathway databases, publications in PubMed, and knowledge of domain experts.</p>
+<pre class="r"><code>c2 &lt;- readRDS(&quot;./data/MSigDB/Hs.c2.all.v7.1.entrez.rds&quot;, refhook = NULL)
+idx &lt;- ids2indices(c2, id=counts$genes$ENTREZID, remove.empty=TRUE)
+cam_c2 &lt;- camera(counts,idx,design1)
+write.csv(cam_c2[cam_c2$FDR &lt; 0.05,], &quot;./docs/camera_output/c2.csv&quot;, row.names = TRUE)
+kable_styling(kable(cam_c2[cam_c2$FDR &lt; 0.05,][1:30,], format.args = list(scientific = -1), digits = 50))</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+NGenes
+</th>
+<th style="text-align:left;">
+Direction
+</th>
+<th style="text-align:right;">
+PValue
+</th>
+<th style="text-align:right;">
+FDR
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+SINGH_NFE2L2_TARGETS
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+1.745549e-40
+</td>
+<td style="text-align:right;">
+9.630195e-37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BROWNE_INTERFERON_RESPONSIVE_GENES
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.384147e-25
+</td>
+<td style="text-align:right;">
+3.818170e-22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MOSERLE_IFNA_RESPONSE
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+3.503567e-25
+</td>
+<td style="text-align:right;">
+6.443060e-22
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SANA_RESPONSE_TO_IFNG_UP
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2.199755e-21
+</td>
+<td style="text-align:right;">
+3.034012e-18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HECKER_IFNB1_TARGETS
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+3.947143e-21
+</td>
+<td style="text-align:right;">
+4.355278e-18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ZHANG_INTERFERON_RESPONSE
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.983076e-21
+</td>
+<td style="text-align:right;">
+5.501439e-18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENNETT_SYSTEMIC_LUPUS_ERYTHEMATOSUS
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+3.895370e-20
+</td>
+<td style="text-align:right;">
+3.070108e-17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+REACTOME_INTERFERON_ALPHA_BETA_SIGNALING
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+2.857210e-19
+</td>
+<td style="text-align:right;">
+1.970403e-16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BOWIE_RESPONSE_TO_TAMOXIFEN
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+6.725864e-19
+</td>
+<td style="text-align:right;">
+4.122955e-16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EINAV_INTERFERON_SIGNATURE_IN_CANCER
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+3.454755e-17
+</td>
+<td style="text-align:right;">
+1.905988e-14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TAKEDA_TARGETS_OF_NUP98_HOXA9_FUSION_3D_UP
+</td>
+<td style="text-align:right;">
+132
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.139843e-17
+</td>
+<td style="text-align:right;">
+2.577865e-14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FARMER_BREAST_CANCER_CLUSTER_1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.298022e-15
+</td>
+<td style="text-align:right;">
+5.967658e-13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KRASNOSELSKAYA_ILF3_TARGETS_UP
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.904182e-15
+</td>
+<td style="text-align:right;">
+2.505644e-12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DAUER_STAT3_TARGETS_DN
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.518623e-14
+</td>
+<td style="text-align:right;">
+5.984459e-12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BOSCO_INTERFERON_INDUCED_ANTIVIRAL_MODULE
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+5.477624e-14
+</td>
+<td style="text-align:right;">
+2.014670e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ELVIDGE_HIF1A_TARGETS_UP
+</td>
+<td style="text-align:right;">
+64
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+9.504192e-14
+</td>
+<td style="text-align:right;">
+3.277164e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BOWIE_RESPONSE_TO_EXTRACELLULAR_MATRIX
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.114328e-13
+</td>
+<td style="text-align:right;">
+3.616322e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TAKEDA_TARGETS_OF_NUP98_HOXA9_FUSION_8D_UP
+</td>
+<td style="text-align:right;">
+103
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.538769e-13
+</td>
+<td style="text-align:right;">
+4.716326e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GRANDVAUX_IFN_RESPONSE_NOT_VIA_IRF3
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+6.208455e-13
+</td>
+<td style="text-align:right;">
+1.802739e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TAKEDA_TARGETS_OF_NUP98_HOXA9_FUSION_10D_UP
+</td>
+<td style="text-align:right;">
+127
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.296876e-12
+</td>
+<td style="text-align:right;">
+3.577433e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ELVIDGE_HYPOXIA_DN
+</td>
+<td style="text-align:right;">
+140
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+4.761797e-12
+</td>
+<td style="text-align:right;">
+1.250992e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TSAI_DNAJB4_TARGETS_UP
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+6.693507e-12
+</td>
+<td style="text-align:right;">
+1.678549e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UROSEVIC_RESPONSE_TO_IMIQUIMOD
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+1.763247e-11
+</td>
+<td style="text-align:right;">
+4.229494e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ELVIDGE_HIF1A_AND_HIF2A_TARGETS_UP
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.241695e-11
+</td>
+<td style="text-align:right;">
+5.153097e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KARLSSON_TGFB1_TARGETS_UP
+</td>
+<td style="text-align:right;">
+116
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.553200e-11
+</td>
+<td style="text-align:right;">
+5.634401e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+REACTOME_RRNA_MODIFICATION_IN_THE_NUCLEUS_AND_CYTOSOL
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+3.879756e-11
+</td>
+<td style="text-align:right;">
+8.232543e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+REACTOME_INTERFERON_GAMMA_SIGNALING
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+4.194379e-11
+</td>
+<td style="text-align:right;">
+8.570514e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STAMBOLSKY_TARGETS_OF_MUTATED_TP53_DN
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:left;">
+Down
+</td>
+<td style="text-align:right;">
+9.979462e-11
+</td>
+<td style="text-align:right;">
+1.966310e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LEE_BMP2_TARGETS_DN
+</td>
+<td style="text-align:right;">
+851
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.710385e-10
+</td>
+<td style="text-align:right;">
+5.156275e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WEI_MYCN_TARGETS_WITH_E_BOX
+</td>
+<td style="text-align:right;">
+721
+</td>
+<td style="text-align:left;">
+Up
+</td>
+<td style="text-align:right;">
+2.841576e-10
+</td>
+<td style="text-align:right;">
+5.225659e-08
+</td>
+</tr>
+</tbody>
+</table>
+<p>The top gene set identified was <a href="https://www.gsea-msigdb.org/gsea/msigdb/cards/SINGH_NFE2L2_TARGETS">SINGH_NFE2L2_TARGETS</a>, which consists of genes down-regulated in lung cancer cell lines when NRF2 is knocked down by RNAi. This results correlates with previous experimental evidence generated in our lab that suggests prasugrel up-regulates NRF2 response genes. Many of the down-regulated gene sets in this list consist of interferon response genes, which correlates with the GO results and Hallmark genes sets identified above. The barcode plots below show the top 4 genesets.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+sapply(1:4, function(i){
+  barcodeplot(qlf$table$logFC, index=idx[[rownames(cam_c2)[i]]], 
+              main = rownames(cam_c2)[i], cex.main = 0.75)
+})</code></pre>
+<p><img src="figure/edgeR_DGE_analysis.Rmd/c2_barcode-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+
+[[4]]
+NULL</code></pre>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>While there was some variability between trophoblast cells isolated from different placentas, within each trophoblast isolation, the transcriptome of the cells responded similarly to prasugrel. We identified 2698 down-regulated and 2317 upregulated genes with FDR &lt; 0.05. When a logFC cutoff was applied, we identified 9 down-regulated and 16 up-regulated genes with prasugrel treatment, which represented genes that are most likely to be biologically meaningful. The significant genes were enriched for GO terms associated with interferon signalling. Gene set testing supported these results, as well as well as identified gene sets that implicate prasugrel in NRF2-regulated pathways.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS  10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] gplots_3.1.3                           
+ [2] GOplot_1.0.2                           
+ [3] gridExtra_2.3                          
+ [4] ggdendro_0.1.23                        
+ [5] ggrepel_0.9.1                          
+ [6] here_1.0.1                             
+ [7] NMF_0.24.0                             
+ [8] cluster_2.1.2                          
+ [9] rngtools_1.5.2                         
+[10] pkgmaker_0.32.2                        
+[11] registry_0.5-1                         
+[12] patchwork_1.1.2                        
+[13] Homo.sapiens_1.3.1                     
+[14] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+[15] org.Hs.eg.db_3.10.0                    
+[16] GO.db_3.10.0                           
+[17] OrganismDbi_1.28.0                     
+[18] GenomicFeatures_1.38.2                 
+[19] AnnotationDbi_1.48.0                   
+[20] kableExtra_1.3.4                       
+[21] knitr_1.40                             
+[22] tableone_0.13.2                        
+[23] RColorBrewer_1.1-3                     
+[24] EDASeq_2.20.0                          
+[25] ShortRead_1.44.3                       
+[26] GenomicAlignments_1.22.1               
+[27] SummarizedExperiment_1.16.1            
+[28] DelayedArray_0.12.3                    
+[29] matrixStats_0.62.0                     
+[30] Rsamtools_2.2.3                        
+[31] GenomicRanges_1.38.0                   
+[32] GenomeInfoDb_1.22.1                    
+[33] Biostrings_2.54.0                      
+[34] XVector_0.26.0                         
+[35] IRanges_2.20.2                         
+[36] S4Vectors_0.24.4                       
+[37] BiocParallel_1.20.1                    
+[38] Biobase_2.46.0                         
+[39] BiocGenerics_0.32.0                    
+[40] forcats_0.5.2                          
+[41] stringr_1.4.1                          
+[42] dplyr_1.0.10                           
+[43] purrr_0.3.4                            
+[44] readr_2.1.2                            
+[45] tidyr_1.2.1                            
+[46] tibble_3.1.8                           
+[47] ggplot2_3.3.6                          
+[48] tidyverse_1.3.2                        
+[49] edgeR_3.28.1                           
+[50] Glimma_1.14.0                          
+[51] limma_3.42.2                           
+[52] workflowr_1.7.0                        
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2             R.utils_2.12.0         tidyselect_1.1.2      
+  [4] RSQLite_2.2.17         grid_3.6.1             DESeq_1.38.0          
+  [7] munsell_0.5.0          codetools_0.2-18       statmod_1.4.36        
+ [10] interp_1.0-33          withr_2.5.0            colorspace_2.0-3      
+ [13] highr_0.9              rstudioapi_0.14        labeling_0.4.2        
+ [16] git2r_0.30.1           GenomeInfoDbData_1.2.2 hwriter_1.3.2.1       
+ [19] farver_2.1.1           bit64_4.0.5            rprojroot_2.0.3       
+ [22] vctrs_0.4.1            generics_0.1.3         xfun_0.33             
+ [25] BiocFileCache_1.10.2   R6_2.5.1               doParallel_1.0.17     
+ [28] locfit_1.5-9.4         bitops_1.0-7           cachem_1.0.6          
+ [31] assertthat_0.2.1       promises_1.2.0.1       scales_1.2.1          
+ [34] googlesheets4_1.0.1    gtable_0.3.1           processx_3.7.0        
+ [37] rlang_1.0.6            genefilter_1.68.0      systemfonts_1.0.4     
+ [40] splines_3.6.1          rtracklayer_1.46.0     gargle_1.2.1          
+ [43] broom_1.0.1            BiocManager_1.30.18    yaml_2.3.5            
+ [46] reshape2_1.4.4         modelr_0.1.9           backports_1.4.1       
+ [49] httpuv_1.6.6           RBGL_1.62.1            tools_3.6.1           
+ [52] gridBase_0.4-7         ellipsis_0.3.2         jquerylib_0.1.4       
+ [55] Rcpp_1.0.9             plyr_1.8.7             progress_1.2.2        
+ [58] zlibbioc_1.32.0        RCurl_1.98-1.8         ps_1.7.1              
+ [61] prettyunits_1.1.1      openssl_2.0.3          deldir_1.0-6          
+ [64] haven_2.5.1            fs_1.5.2               survey_4.1-1          
+ [67] magrittr_2.0.3         reprex_2.0.2           googledrive_2.0.0     
+ [70] whisker_0.4            aroma.light_3.16.0     hms_1.1.2             
+ [73] evaluate_0.16          xtable_1.8-4           XML_3.99-0.3          
+ [76] jpeg_0.1-9             readxl_1.4.1           compiler_3.6.1        
+ [79] biomaRt_2.42.1         KernSmooth_2.23-20     crayon_1.5.1          
+ [82] R.oo_1.25.0            htmltools_0.5.3        later_1.3.0           
+ [85] tzdb_0.3.0             geneplotter_1.64.0     lubridate_1.8.0       
+ [88] DBI_1.1.3              dbplyr_2.2.1           MASS_7.3-58.1         
+ [91] rappdirs_0.3.3         Matrix_1.3-4           cli_3.4.1             
+ [94] mitools_2.4            R.methodsS3_1.8.2      pkgconfig_2.0.3       
+ [97] getPass_0.2-2          xml2_1.3.3             foreach_1.5.2         
+[100] svglite_2.1.0          annotate_1.64.0        bslib_0.4.0           
+[103] webshot_0.5.4          rvest_1.0.3            callr_3.7.2           
+[106] digest_0.6.29          graph_1.64.0           rmarkdown_2.16        
+[109] cellranger_1.1.0       curl_4.3.2             gtools_3.9.3          
+[112] lifecycle_1.0.2        jsonlite_1.8.0         viridisLite_0.4.1     
+[115] askpass_1.1            fansi_1.0.3            pillar_1.8.1          
+[118] lattice_0.20-45        fastmap_1.1.0          httr_1.4.4            
+[121] survival_3.4-0         glue_1.6.2             png_0.1-7             
+[124] iterators_1.0.14       bit_4.0.4              stringi_1.7.8         
+[127] sass_0.4.2             blob_1.2.3             caTools_1.18.2        
+[130] latticeExtra_0.6-30    memoise_2.0.1         </code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS  10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] gplots_3.1.3                           
+ [2] GOplot_1.0.2                           
+ [3] gridExtra_2.3                          
+ [4] ggdendro_0.1.23                        
+ [5] ggrepel_0.9.1                          
+ [6] here_1.0.1                             
+ [7] NMF_0.24.0                             
+ [8] cluster_2.1.2                          
+ [9] rngtools_1.5.2                         
+[10] pkgmaker_0.32.2                        
+[11] registry_0.5-1                         
+[12] patchwork_1.1.2                        
+[13] Homo.sapiens_1.3.1                     
+[14] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+[15] org.Hs.eg.db_3.10.0                    
+[16] GO.db_3.10.0                           
+[17] OrganismDbi_1.28.0                     
+[18] GenomicFeatures_1.38.2                 
+[19] AnnotationDbi_1.48.0                   
+[20] kableExtra_1.3.4                       
+[21] knitr_1.40                             
+[22] tableone_0.13.2                        
+[23] RColorBrewer_1.1-3                     
+[24] EDASeq_2.20.0                          
+[25] ShortRead_1.44.3                       
+[26] GenomicAlignments_1.22.1               
+[27] SummarizedExperiment_1.16.1            
+[28] DelayedArray_0.12.3                    
+[29] matrixStats_0.62.0                     
+[30] Rsamtools_2.2.3                        
+[31] GenomicRanges_1.38.0                   
+[32] GenomeInfoDb_1.22.1                    
+[33] Biostrings_2.54.0                      
+[34] XVector_0.26.0                         
+[35] IRanges_2.20.2                         
+[36] S4Vectors_0.24.4                       
+[37] BiocParallel_1.20.1                    
+[38] Biobase_2.46.0                         
+[39] BiocGenerics_0.32.0                    
+[40] forcats_0.5.2                          
+[41] stringr_1.4.1                          
+[42] dplyr_1.0.10                           
+[43] purrr_0.3.4                            
+[44] readr_2.1.2                            
+[45] tidyr_1.2.1                            
+[46] tibble_3.1.8                           
+[47] ggplot2_3.3.6                          
+[48] tidyverse_1.3.2                        
+[49] edgeR_3.28.1                           
+[50] Glimma_1.14.0                          
+[51] limma_3.42.2                           
+[52] workflowr_1.7.0                        
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2             R.utils_2.12.0         tidyselect_1.1.2      
+  [4] RSQLite_2.2.17         grid_3.6.1             DESeq_1.38.0          
+  [7] munsell_0.5.0          codetools_0.2-18       statmod_1.4.36        
+ [10] interp_1.0-33          withr_2.5.0            colorspace_2.0-3      
+ [13] highr_0.9              rstudioapi_0.14        labeling_0.4.2        
+ [16] git2r_0.30.1           GenomeInfoDbData_1.2.2 hwriter_1.3.2.1       
+ [19] farver_2.1.1           bit64_4.0.5            rprojroot_2.0.3       
+ [22] vctrs_0.4.1            generics_0.1.3         xfun_0.33             
+ [25] BiocFileCache_1.10.2   R6_2.5.1               doParallel_1.0.17     
+ [28] locfit_1.5-9.4         bitops_1.0-7           cachem_1.0.6          
+ [31] assertthat_0.2.1       promises_1.2.0.1       scales_1.2.1          
+ [34] googlesheets4_1.0.1    gtable_0.3.1           processx_3.7.0        
+ [37] rlang_1.0.6            genefilter_1.68.0      systemfonts_1.0.4     
+ [40] splines_3.6.1          rtracklayer_1.46.0     gargle_1.2.1          
+ [43] broom_1.0.1            BiocManager_1.30.18    yaml_2.3.5            
+ [46] reshape2_1.4.4         modelr_0.1.9           backports_1.4.1       
+ [49] httpuv_1.6.6           RBGL_1.62.1            tools_3.6.1           
+ [52] gridBase_0.4-7         ellipsis_0.3.2         jquerylib_0.1.4       
+ [55] Rcpp_1.0.9             plyr_1.8.7             progress_1.2.2        
+ [58] zlibbioc_1.32.0        RCurl_1.98-1.8         ps_1.7.1              
+ [61] prettyunits_1.1.1      openssl_2.0.3          deldir_1.0-6          
+ [64] haven_2.5.1            fs_1.5.2               survey_4.1-1          
+ [67] magrittr_2.0.3         reprex_2.0.2           googledrive_2.0.0     
+ [70] whisker_0.4            aroma.light_3.16.0     hms_1.1.2             
+ [73] evaluate_0.16          xtable_1.8-4           XML_3.99-0.3          
+ [76] jpeg_0.1-9             readxl_1.4.1           compiler_3.6.1        
+ [79] biomaRt_2.42.1         KernSmooth_2.23-20     crayon_1.5.1          
+ [82] R.oo_1.25.0            htmltools_0.5.3        later_1.3.0           
+ [85] tzdb_0.3.0             geneplotter_1.64.0     lubridate_1.8.0       
+ [88] DBI_1.1.3              dbplyr_2.2.1           MASS_7.3-58.1         
+ [91] rappdirs_0.3.3         Matrix_1.3-4           cli_3.4.1             
+ [94] mitools_2.4            R.methodsS3_1.8.2      pkgconfig_2.0.3       
+ [97] getPass_0.2-2          xml2_1.3.3             foreach_1.5.2         
+[100] svglite_2.1.0          annotate_1.64.0        bslib_0.4.0           
+[103] webshot_0.5.4          rvest_1.0.3            callr_3.7.2           
+[106] digest_0.6.29          graph_1.64.0           rmarkdown_2.16        
+[109] cellranger_1.1.0       curl_4.3.2             gtools_3.9.3          
+[112] lifecycle_1.0.2        jsonlite_1.8.0         viridisLite_0.4.1     
+[115] askpass_1.1            fansi_1.0.3            pillar_1.8.1          
+[118] lattice_0.20-45        fastmap_1.1.0          httr_1.4.4            
+[121] survival_3.4-0         glue_1.6.2             png_0.1-7             
+[124] iterators_1.0.14       bit_4.0.4              stringi_1.7.8         
+[127] sass_0.4.2             blob_1.2.3             caTools_1.18.2        
+[130] latticeExtra_0.6-30    memoise_2.0.1         </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
